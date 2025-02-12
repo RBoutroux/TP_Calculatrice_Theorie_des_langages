@@ -2,13 +2,16 @@ import ply.lex as lex
 import ply.yacc as yacc
 
 # Liste des noms des tokens
-tokens = ('NOMBRE', 'PLUS', 'MOINS','FOIS')
+tokens = ('NOMBRE', 'PLUS', 'MOINS','FOIS', 'DIV', 'LPAREN', 'RPAREN')
 
 # Définition de l'expression rationnelle pour chaque token et de la valeur 
 # associée (pour NOMBRE)
 t_PLUS  = r'\+' # notez le \+ et pas + qui a une signification pour les expressions rationnelles
 t_MOINS = r'-' 
 t_FOIS  = r'\*'
+t_DIV   = r'/'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
 
 def t_NOMBRE(t):
     r'[0-9]+' # on peut aussi écrire r'\d+'
@@ -65,16 +68,23 @@ def p_expr_ops(p):
 # une expression peut aussi être un produit de termes
 def p_expr2(p):
     '''expr2 : expr2 FOIS terme
+            | expr2 DIV terme
             | terme'''
     if len(p) == 2:
         p[0] = p[1]
     elif p[2] == '*':
         p[0] = p[1] * p[3]
+    elif p[2] == '/':
+        p[0] = p[1] // p[3]
 
 def p_terme(p):
-    'terme : NOMBRE'
+    '''terme : NOMBRE
+            | LPAREN expr RPAREN'''
     # pour l'instant, un terme est forcément un nombre
-    p[0] = p[1]
+    if len(p) == 2:
+        p[0] = p[1]
+    elif (p[1] == '(' and p[3] == ')'):
+        p[0] = p[2]
 
 # gestion minimaliste des erreurs de syntaxe
 def p_error(p):

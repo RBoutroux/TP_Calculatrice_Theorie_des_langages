@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'FOIS MOINS NOMBRE PLUSexpression : exprexpr : termeexpr : expr PLUS  expr2\n            | expr MOINS expr2\n            | expr2expr2 : expr2 FOIS terme\n            | termeterme : NOMBRE'
+_lr_signature = 'DIV FOIS LPAREN MOINS NOMBRE PLUS RPARENexpression : exprexpr : termeexpr : expr PLUS  expr2\n            | expr MOINS expr2\n            | expr2expr2 : expr2 FOIS terme\n            | expr2 DIV terme\n            | termeterme : NOMBRE\n            | LPAREN expr RPAREN'
     
-_lr_action_items = {'NOMBRE':([0,6,7,8,],[5,5,5,5,]),'$end':([1,2,3,4,5,9,10,11,12,],[0,-1,-2,-5,-8,-3,-7,-4,-6,]),'PLUS':([2,3,4,5,9,10,11,12,],[6,-2,-5,-8,-3,-7,-4,-6,]),'MOINS':([2,3,4,5,9,10,11,12,],[7,-2,-5,-8,-3,-7,-4,-6,]),'FOIS':([3,4,5,9,10,11,12,],[-7,8,-8,8,-7,8,-6,]),}
+_lr_action_items = {'NOMBRE':([0,6,7,8,9,10,],[5,5,5,5,5,5,]),'LPAREN':([0,6,7,8,9,10,],[6,6,6,6,6,6,]),'$end':([1,2,3,4,5,12,13,14,15,16,17,],[0,-1,-2,-5,-9,-3,-8,-4,-6,-7,-10,]),'PLUS':([2,3,4,5,11,12,13,14,15,16,17,],[7,-2,-5,-9,7,-3,-8,-4,-6,-7,-10,]),'MOINS':([2,3,4,5,11,12,13,14,15,16,17,],[8,-2,-5,-9,8,-3,-8,-4,-6,-7,-10,]),'RPAREN':([3,4,5,11,12,13,14,15,16,17,],[-2,-5,-9,17,-3,-8,-4,-6,-7,-10,]),'FOIS':([3,4,5,12,13,14,15,16,17,],[-8,9,-9,9,-8,9,-6,-7,-10,]),'DIV':([3,4,5,12,13,14,15,16,17,],[-8,10,-9,10,-8,10,-6,-7,-10,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,],[1,]),'expr':([0,],[2,]),'terme':([0,6,7,8,],[3,10,10,12,]),'expr2':([0,6,7,],[4,9,11,]),}
+_lr_goto_items = {'expression':([0,],[1,]),'expr':([0,6,],[2,11,]),'terme':([0,6,7,8,9,10,],[3,3,13,13,15,16,]),'expr2':([0,6,7,8,],[4,4,12,14,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,12 +27,14 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> expression","S'",1,None,None,None),
-  ('expression -> expr','expression',1,'p_expression','eval.py',38),
-  ('expr -> terme','expr',1,'p_expr_terme','eval.py',49),
-  ('expr -> expr PLUS expr2','expr',3,'p_expr_ops','eval.py',53),
-  ('expr -> expr MOINS expr2','expr',3,'p_expr_ops','eval.py',54),
-  ('expr -> expr2','expr',1,'p_expr_ops','eval.py',55),
-  ('expr2 -> expr2 FOIS terme','expr2',3,'p_expr2','eval.py',65),
-  ('expr2 -> terme','expr2',1,'p_expr2','eval.py',66),
-  ('terme -> NOMBRE','terme',1,'p_terme','eval.py',73),
+  ('expression -> expr','expression',1,'p_expression','eval.py',41),
+  ('expr -> terme','expr',1,'p_expr_terme','eval.py',52),
+  ('expr -> expr PLUS expr2','expr',3,'p_expr_ops','eval.py',56),
+  ('expr -> expr MOINS expr2','expr',3,'p_expr_ops','eval.py',57),
+  ('expr -> expr2','expr',1,'p_expr_ops','eval.py',58),
+  ('expr2 -> expr2 FOIS terme','expr2',3,'p_expr2','eval.py',70),
+  ('expr2 -> expr2 DIV terme','expr2',3,'p_expr2','eval.py',71),
+  ('expr2 -> terme','expr2',1,'p_expr2','eval.py',72),
+  ('terme -> NOMBRE','terme',1,'p_terme','eval.py',81),
+  ('terme -> LPAREN expr RPAREN','terme',3,'p_terme','eval.py',82),
 ]
