@@ -15,10 +15,10 @@ t_RPAREN = r'\)'
 t_POW = r'\^'
 
 def t_NOMBRE(t):
-    r'[0-9]+' # on peut aussi écrire r'\d+'
+    r'[0-9.0-9]+' # on peut aussi écrire r'\d+'
     # initialement t.value est la chaîne de caractères correspondant à 
     # l'expression rationnelle
-    t.value = int(t.value) 
+    t.value = float(t.value) 
     # grâce au typage faible de python c'est maintenant un entier
     # on pourrait aussi traiter l'exception ValueError pour détecter
     # un éventuel débordement de capacité.
@@ -76,7 +76,7 @@ def p_expr2(p):
     elif p[2] == '*':
         p[0] = p[1] * p[3]
     elif p[2] == '/':
-        p[0] = p[1] // p[3]
+        p[0] = p[1] / p[3]
 
 def p_expr3(p):
     '''expr3 : terme POW expr3
