@@ -2,7 +2,7 @@ import ply.lex as lex
 import ply.yacc as yacc
 
 # Liste des noms des tokens
-tokens = ('NOMBRE', 'PLUS', 'MOINS','FOIS', 'DIV', 'LPAREN', 'RPAREN')
+tokens = ('NOMBRE', 'PLUS', 'MOINS','FOIS', 'DIV', 'LPAREN', 'RPAREN', 'POW')
 
 # Définition de l'expression rationnelle pour chaque token et de la valeur 
 # associée (pour NOMBRE)
@@ -12,6 +12,7 @@ t_FOIS  = r'\*'
 t_DIV   = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_POW = r'\^'
 
 def t_NOMBRE(t):
     r'[0-9]+' # on peut aussi écrire r'\d+'
@@ -67,15 +68,23 @@ def p_expr_ops(p):
 
 # une expression peut aussi être un produit de termes
 def p_expr2(p):
-    '''expr2 : expr2 FOIS terme
-            | expr2 DIV terme
-            | terme'''
+    '''expr2 : expr2 FOIS expr3
+            | expr2 DIV expr3
+            | expr3'''
     if len(p) == 2:
         p[0] = p[1]
     elif p[2] == '*':
         p[0] = p[1] * p[3]
     elif p[2] == '/':
         p[0] = p[1] // p[3]
+
+def p_expr3(p):
+    '''expr3 : terme POW expr3
+            | terme'''
+    if len(p) == 2:
+        p[0] = p[1]
+    elif p[2] == '^':
+        p[0] = p[1] ** p[3]
 
 def p_terme(p):
     '''terme : NOMBRE

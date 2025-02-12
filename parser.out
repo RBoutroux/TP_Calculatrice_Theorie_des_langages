@@ -8,29 +8,33 @@ Rule 2     expr -> terme
 Rule 3     expr -> expr PLUS expr2
 Rule 4     expr -> expr MOINS expr2
 Rule 5     expr -> expr2
-Rule 6     expr2 -> expr2 FOIS terme
-Rule 7     expr2 -> expr2 DIV terme
-Rule 8     expr2 -> terme
-Rule 9     terme -> NOMBRE
-Rule 10    terme -> LPAREN expr RPAREN
+Rule 6     expr2 -> expr2 FOIS expr3
+Rule 7     expr2 -> expr2 DIV expr3
+Rule 8     expr2 -> expr3
+Rule 9     expr3 -> terme POW expr3
+Rule 10    expr3 -> terme
+Rule 11    terme -> NOMBRE
+Rule 12    terme -> LPAREN expr RPAREN
 
 Terminals, with rules where they appear
 
 DIV                  : 7
 FOIS                 : 6
-LPAREN               : 10
+LPAREN               : 12
 MOINS                : 4
-NOMBRE               : 9
+NOMBRE               : 11
 PLUS                 : 3
-RPAREN               : 10
+POW                  : 9
+RPAREN               : 12
 error                : 
 
 Nonterminals, with rules where they appear
 
-expr                 : 1 3 4 10
+expr                 : 1 3 4 12
 expr2                : 3 4 5 6 7
+expr3                : 6 7 8 9
 expression           : 0
-terme                : 2 6 7 8
+terme                : 2 9 10
 
 Parsing method: LALR
 
@@ -42,11 +46,13 @@ state 0
     (3) expr -> . expr PLUS expr2
     (4) expr -> . expr MOINS expr2
     (5) expr -> . expr2
-    (9) terme -> . NOMBRE
-    (10) terme -> . LPAREN expr RPAREN
-    (6) expr2 -> . expr2 FOIS terme
-    (7) expr2 -> . expr2 DIV terme
-    (8) expr2 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
+    (6) expr2 -> . expr2 FOIS expr3
+    (7) expr2 -> . expr2 DIV expr3
+    (8) expr2 -> . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
 
     NOMBRE          shift and go to state 5
     LPAREN          shift and go to state 6
@@ -55,6 +61,7 @@ state 0
     expr                           shift and go to state 2
     terme                          shift and go to state 3
     expr2                          shift and go to state 4
+    expr3                          shift and go to state 7
 
 state 1
 
@@ -69,14 +76,15 @@ state 2
     (4) expr -> expr . MOINS expr2
 
     $end            reduce using rule 1 (expression -> expr .)
-    PLUS            shift and go to state 7
-    MOINS           shift and go to state 8
+    PLUS            shift and go to state 8
+    MOINS           shift and go to state 9
 
 
 state 3
 
     (2) expr -> terme .
-    (8) expr2 -> terme .
+    (9) expr3 -> terme . POW expr3
+    (10) expr3 -> terme .
 
   ! reduce/reduce conflict for PLUS resolved using rule 2 (expr -> terme .)
   ! reduce/reduce conflict for MOINS resolved using rule 2 (expr -> terme .)
@@ -86,201 +94,259 @@ state 3
     MOINS           reduce using rule 2 (expr -> terme .)
     $end            reduce using rule 2 (expr -> terme .)
     RPAREN          reduce using rule 2 (expr -> terme .)
-    FOIS            reduce using rule 8 (expr2 -> terme .)
-    DIV             reduce using rule 8 (expr2 -> terme .)
+    POW             shift and go to state 10
+    FOIS            reduce using rule 10 (expr3 -> terme .)
+    DIV             reduce using rule 10 (expr3 -> terme .)
 
-  ! PLUS            [ reduce using rule 8 (expr2 -> terme .) ]
-  ! MOINS           [ reduce using rule 8 (expr2 -> terme .) ]
-  ! $end            [ reduce using rule 8 (expr2 -> terme .) ]
-  ! RPAREN          [ reduce using rule 8 (expr2 -> terme .) ]
+  ! PLUS            [ reduce using rule 10 (expr3 -> terme .) ]
+  ! MOINS           [ reduce using rule 10 (expr3 -> terme .) ]
+  ! $end            [ reduce using rule 10 (expr3 -> terme .) ]
+  ! RPAREN          [ reduce using rule 10 (expr3 -> terme .) ]
 
 
 state 4
 
     (5) expr -> expr2 .
-    (6) expr2 -> expr2 . FOIS terme
-    (7) expr2 -> expr2 . DIV terme
+    (6) expr2 -> expr2 . FOIS expr3
+    (7) expr2 -> expr2 . DIV expr3
 
     PLUS            reduce using rule 5 (expr -> expr2 .)
     MOINS           reduce using rule 5 (expr -> expr2 .)
     $end            reduce using rule 5 (expr -> expr2 .)
     RPAREN          reduce using rule 5 (expr -> expr2 .)
-    FOIS            shift and go to state 9
-    DIV             shift and go to state 10
+    FOIS            shift and go to state 11
+    DIV             shift and go to state 12
 
 
 state 5
 
-    (9) terme -> NOMBRE .
+    (11) terme -> NOMBRE .
 
-    PLUS            reduce using rule 9 (terme -> NOMBRE .)
-    MOINS           reduce using rule 9 (terme -> NOMBRE .)
-    $end            reduce using rule 9 (terme -> NOMBRE .)
-    FOIS            reduce using rule 9 (terme -> NOMBRE .)
-    DIV             reduce using rule 9 (terme -> NOMBRE .)
-    RPAREN          reduce using rule 9 (terme -> NOMBRE .)
+    POW             reduce using rule 11 (terme -> NOMBRE .)
+    PLUS            reduce using rule 11 (terme -> NOMBRE .)
+    MOINS           reduce using rule 11 (terme -> NOMBRE .)
+    $end            reduce using rule 11 (terme -> NOMBRE .)
+    FOIS            reduce using rule 11 (terme -> NOMBRE .)
+    DIV             reduce using rule 11 (terme -> NOMBRE .)
+    RPAREN          reduce using rule 11 (terme -> NOMBRE .)
 
 
 state 6
 
-    (10) terme -> LPAREN . expr RPAREN
+    (12) terme -> LPAREN . expr RPAREN
     (2) expr -> . terme
     (3) expr -> . expr PLUS expr2
     (4) expr -> . expr MOINS expr2
     (5) expr -> . expr2
-    (9) terme -> . NOMBRE
-    (10) terme -> . LPAREN expr RPAREN
-    (6) expr2 -> . expr2 FOIS terme
-    (7) expr2 -> . expr2 DIV terme
-    (8) expr2 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
+    (6) expr2 -> . expr2 FOIS expr3
+    (7) expr2 -> . expr2 DIV expr3
+    (8) expr2 -> . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
 
     NOMBRE          shift and go to state 5
     LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 11
+    expr                           shift and go to state 13
     terme                          shift and go to state 3
     expr2                          shift and go to state 4
+    expr3                          shift and go to state 7
 
 state 7
 
-    (3) expr -> expr PLUS . expr2
-    (6) expr2 -> . expr2 FOIS terme
-    (7) expr2 -> . expr2 DIV terme
-    (8) expr2 -> . terme
-    (9) terme -> . NOMBRE
-    (10) terme -> . LPAREN expr RPAREN
+    (8) expr2 -> expr3 .
 
-    NOMBRE          shift and go to state 5
-    LPAREN          shift and go to state 6
+    FOIS            reduce using rule 8 (expr2 -> expr3 .)
+    DIV             reduce using rule 8 (expr2 -> expr3 .)
+    PLUS            reduce using rule 8 (expr2 -> expr3 .)
+    MOINS           reduce using rule 8 (expr2 -> expr3 .)
+    $end            reduce using rule 8 (expr2 -> expr3 .)
+    RPAREN          reduce using rule 8 (expr2 -> expr3 .)
 
-    expr2                          shift and go to state 12
-    terme                          shift and go to state 13
 
 state 8
 
-    (4) expr -> expr MOINS . expr2
-    (6) expr2 -> . expr2 FOIS terme
-    (7) expr2 -> . expr2 DIV terme
-    (8) expr2 -> . terme
-    (9) terme -> . NOMBRE
-    (10) terme -> . LPAREN expr RPAREN
+    (3) expr -> expr PLUS . expr2
+    (6) expr2 -> . expr2 FOIS expr3
+    (7) expr2 -> . expr2 DIV expr3
+    (8) expr2 -> . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
 
     NOMBRE          shift and go to state 5
     LPAREN          shift and go to state 6
 
     expr2                          shift and go to state 14
-    terme                          shift and go to state 13
+    expr3                          shift and go to state 7
+    terme                          shift and go to state 15
 
 state 9
 
-    (6) expr2 -> expr2 FOIS . terme
-    (9) terme -> . NOMBRE
-    (10) terme -> . LPAREN expr RPAREN
+    (4) expr -> expr MOINS . expr2
+    (6) expr2 -> . expr2 FOIS expr3
+    (7) expr2 -> . expr2 DIV expr3
+    (8) expr2 -> . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
+
+    NOMBRE          shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    expr2                          shift and go to state 16
+    expr3                          shift and go to state 7
+    terme                          shift and go to state 15
+
+state 10
+
+    (9) expr3 -> terme POW . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
 
     NOMBRE          shift and go to state 5
     LPAREN          shift and go to state 6
 
     terme                          shift and go to state 15
+    expr3                          shift and go to state 17
 
-state 10
+state 11
 
-    (7) expr2 -> expr2 DIV . terme
-    (9) terme -> . NOMBRE
-    (10) terme -> . LPAREN expr RPAREN
+    (6) expr2 -> expr2 FOIS . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
 
     NOMBRE          shift and go to state 5
     LPAREN          shift and go to state 6
 
-    terme                          shift and go to state 16
-
-state 11
-
-    (10) terme -> LPAREN expr . RPAREN
-    (3) expr -> expr . PLUS expr2
-    (4) expr -> expr . MOINS expr2
-
-    RPAREN          shift and go to state 17
-    PLUS            shift and go to state 7
-    MOINS           shift and go to state 8
-
+    expr3                          shift and go to state 18
+    terme                          shift and go to state 15
 
 state 12
 
+    (7) expr2 -> expr2 DIV . expr3
+    (9) expr3 -> . terme POW expr3
+    (10) expr3 -> . terme
+    (11) terme -> . NOMBRE
+    (12) terme -> . LPAREN expr RPAREN
+
+    NOMBRE          shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    expr3                          shift and go to state 19
+    terme                          shift and go to state 15
+
+state 13
+
+    (12) terme -> LPAREN expr . RPAREN
+    (3) expr -> expr . PLUS expr2
+    (4) expr -> expr . MOINS expr2
+
+    RPAREN          shift and go to state 20
+    PLUS            shift and go to state 8
+    MOINS           shift and go to state 9
+
+
+state 14
+
     (3) expr -> expr PLUS expr2 .
-    (6) expr2 -> expr2 . FOIS terme
-    (7) expr2 -> expr2 . DIV terme
+    (6) expr2 -> expr2 . FOIS expr3
+    (7) expr2 -> expr2 . DIV expr3
 
     PLUS            reduce using rule 3 (expr -> expr PLUS expr2 .)
     MOINS           reduce using rule 3 (expr -> expr PLUS expr2 .)
     $end            reduce using rule 3 (expr -> expr PLUS expr2 .)
     RPAREN          reduce using rule 3 (expr -> expr PLUS expr2 .)
-    FOIS            shift and go to state 9
-    DIV             shift and go to state 10
+    FOIS            shift and go to state 11
+    DIV             shift and go to state 12
 
 
-state 13
+state 15
 
-    (8) expr2 -> terme .
+    (9) expr3 -> terme . POW expr3
+    (10) expr3 -> terme .
 
-    FOIS            reduce using rule 8 (expr2 -> terme .)
-    DIV             reduce using rule 8 (expr2 -> terme .)
-    PLUS            reduce using rule 8 (expr2 -> terme .)
-    MOINS           reduce using rule 8 (expr2 -> terme .)
-    $end            reduce using rule 8 (expr2 -> terme .)
-    RPAREN          reduce using rule 8 (expr2 -> terme .)
+    POW             shift and go to state 10
+    FOIS            reduce using rule 10 (expr3 -> terme .)
+    DIV             reduce using rule 10 (expr3 -> terme .)
+    PLUS            reduce using rule 10 (expr3 -> terme .)
+    MOINS           reduce using rule 10 (expr3 -> terme .)
+    $end            reduce using rule 10 (expr3 -> terme .)
+    RPAREN          reduce using rule 10 (expr3 -> terme .)
 
 
-state 14
+state 16
 
     (4) expr -> expr MOINS expr2 .
-    (6) expr2 -> expr2 . FOIS terme
-    (7) expr2 -> expr2 . DIV terme
+    (6) expr2 -> expr2 . FOIS expr3
+    (7) expr2 -> expr2 . DIV expr3
 
     PLUS            reduce using rule 4 (expr -> expr MOINS expr2 .)
     MOINS           reduce using rule 4 (expr -> expr MOINS expr2 .)
     $end            reduce using rule 4 (expr -> expr MOINS expr2 .)
     RPAREN          reduce using rule 4 (expr -> expr MOINS expr2 .)
-    FOIS            shift and go to state 9
-    DIV             shift and go to state 10
-
-
-state 15
-
-    (6) expr2 -> expr2 FOIS terme .
-
-    FOIS            reduce using rule 6 (expr2 -> expr2 FOIS terme .)
-    DIV             reduce using rule 6 (expr2 -> expr2 FOIS terme .)
-    PLUS            reduce using rule 6 (expr2 -> expr2 FOIS terme .)
-    MOINS           reduce using rule 6 (expr2 -> expr2 FOIS terme .)
-    $end            reduce using rule 6 (expr2 -> expr2 FOIS terme .)
-    RPAREN          reduce using rule 6 (expr2 -> expr2 FOIS terme .)
-
-
-state 16
-
-    (7) expr2 -> expr2 DIV terme .
-
-    FOIS            reduce using rule 7 (expr2 -> expr2 DIV terme .)
-    DIV             reduce using rule 7 (expr2 -> expr2 DIV terme .)
-    PLUS            reduce using rule 7 (expr2 -> expr2 DIV terme .)
-    MOINS           reduce using rule 7 (expr2 -> expr2 DIV terme .)
-    $end            reduce using rule 7 (expr2 -> expr2 DIV terme .)
-    RPAREN          reduce using rule 7 (expr2 -> expr2 DIV terme .)
+    FOIS            shift and go to state 11
+    DIV             shift and go to state 12
 
 
 state 17
 
-    (10) terme -> LPAREN expr RPAREN .
+    (9) expr3 -> terme POW expr3 .
 
-    PLUS            reduce using rule 10 (terme -> LPAREN expr RPAREN .)
-    MOINS           reduce using rule 10 (terme -> LPAREN expr RPAREN .)
-    $end            reduce using rule 10 (terme -> LPAREN expr RPAREN .)
-    FOIS            reduce using rule 10 (terme -> LPAREN expr RPAREN .)
-    DIV             reduce using rule 10 (terme -> LPAREN expr RPAREN .)
-    RPAREN          reduce using rule 10 (terme -> LPAREN expr RPAREN .)
+    FOIS            reduce using rule 9 (expr3 -> terme POW expr3 .)
+    DIV             reduce using rule 9 (expr3 -> terme POW expr3 .)
+    PLUS            reduce using rule 9 (expr3 -> terme POW expr3 .)
+    MOINS           reduce using rule 9 (expr3 -> terme POW expr3 .)
+    $end            reduce using rule 9 (expr3 -> terme POW expr3 .)
+    RPAREN          reduce using rule 9 (expr3 -> terme POW expr3 .)
+
+
+state 18
+
+    (6) expr2 -> expr2 FOIS expr3 .
+
+    FOIS            reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
+    DIV             reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
+    PLUS            reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
+    MOINS           reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
+    $end            reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
+    RPAREN          reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
+
+
+state 19
+
+    (7) expr2 -> expr2 DIV expr3 .
+
+    FOIS            reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
+    DIV             reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
+    PLUS            reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
+    MOINS           reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
+    $end            reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
+    RPAREN          reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
+
+
+state 20
+
+    (12) terme -> LPAREN expr RPAREN .
+
+    POW             reduce using rule 12 (terme -> LPAREN expr RPAREN .)
+    PLUS            reduce using rule 12 (terme -> LPAREN expr RPAREN .)
+    MOINS           reduce using rule 12 (terme -> LPAREN expr RPAREN .)
+    $end            reduce using rule 12 (terme -> LPAREN expr RPAREN .)
+    FOIS            reduce using rule 12 (terme -> LPAREN expr RPAREN .)
+    DIV             reduce using rule 12 (terme -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 12 (terme -> LPAREN expr RPAREN .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
 WARNING: reduce/reduce conflict in state 3 resolved using rule (expr -> terme)
-WARNING: rejected rule (expr2 -> terme) in state 3
+WARNING: rejected rule (expr3 -> terme) in state 3
