@@ -16,18 +16,21 @@ Rule 10    expr3 -> terme
 Rule 11    terme -> NOMBRE
 Rule 12    terme -> MOINS terme
 Rule 13    terme -> LPAREN expr RPAREN
-Rule 14    terme -> ANS
+Rule 14    terme -> ANS LCROCHET NOMBRE RCROCHET
+Rule 15    terme -> ANS
 
 Terminals, with rules where they appear
 
-ANS                  : 14
+ANS                  : 14 15
 DIV                  : 7
 FOIS                 : 6
+LCROCHET             : 14
 LPAREN               : 13
 MOINS                : 4 12
-NOMBRE               : 11
+NOMBRE               : 11 14
 PLUS                 : 3
 POW                  : 9
+RCROCHET             : 14
 RPAREN               : 13
 error                : 
 
@@ -52,7 +55,8 @@ state 0
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
     (6) expr2 -> . expr2 FOIS expr3
     (7) expr2 -> . expr2 DIV expr3
     (8) expr2 -> . expr3
@@ -131,7 +135,8 @@ state 5
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
 
     NOMBRE          shift and go to state 6
     MOINS           shift and go to state 5
@@ -163,7 +168,8 @@ state 7
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
     (6) expr2 -> . expr2 FOIS expr3
     (7) expr2 -> . expr2 DIV expr3
     (8) expr2 -> . expr3
@@ -182,15 +188,17 @@ state 7
 
 state 8
 
-    (14) terme -> ANS .
+    (14) terme -> ANS . LCROCHET NOMBRE RCROCHET
+    (15) terme -> ANS .
 
-    POW             reduce using rule 14 (terme -> ANS .)
-    PLUS            reduce using rule 14 (terme -> ANS .)
-    MOINS           reduce using rule 14 (terme -> ANS .)
-    $end            reduce using rule 14 (terme -> ANS .)
-    FOIS            reduce using rule 14 (terme -> ANS .)
-    DIV             reduce using rule 14 (terme -> ANS .)
-    RPAREN          reduce using rule 14 (terme -> ANS .)
+    LCROCHET        shift and go to state 17
+    POW             reduce using rule 15 (terme -> ANS .)
+    PLUS            reduce using rule 15 (terme -> ANS .)
+    MOINS           reduce using rule 15 (terme -> ANS .)
+    $end            reduce using rule 15 (terme -> ANS .)
+    FOIS            reduce using rule 15 (terme -> ANS .)
+    DIV             reduce using rule 15 (terme -> ANS .)
+    RPAREN          reduce using rule 15 (terme -> ANS .)
 
 
 state 9
@@ -216,16 +224,17 @@ state 10
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
 
     NOMBRE          shift and go to state 6
     MOINS           shift and go to state 5
     LPAREN          shift and go to state 7
     ANS             shift and go to state 8
 
-    expr2                          shift and go to state 17
+    expr2                          shift and go to state 18
     expr3                          shift and go to state 9
-    terme                          shift and go to state 18
+    terme                          shift and go to state 19
 
 state 11
 
@@ -238,16 +247,17 @@ state 11
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
 
     NOMBRE          shift and go to state 6
     MOINS           shift and go to state 5
     LPAREN          shift and go to state 7
     ANS             shift and go to state 8
 
-    expr2                          shift and go to state 19
+    expr2                          shift and go to state 20
     expr3                          shift and go to state 9
-    terme                          shift and go to state 18
+    terme                          shift and go to state 19
 
 state 12
 
@@ -257,15 +267,16 @@ state 12
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
 
     NOMBRE          shift and go to state 6
     MOINS           shift and go to state 5
     LPAREN          shift and go to state 7
     ANS             shift and go to state 8
 
-    terme                          shift and go to state 18
-    expr3                          shift and go to state 20
+    terme                          shift and go to state 19
+    expr3                          shift and go to state 21
 
 state 13
 
@@ -275,15 +286,16 @@ state 13
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
 
     NOMBRE          shift and go to state 6
     MOINS           shift and go to state 5
     LPAREN          shift and go to state 7
     ANS             shift and go to state 8
 
-    expr3                          shift and go to state 21
-    terme                          shift and go to state 18
+    expr3                          shift and go to state 22
+    terme                          shift and go to state 19
 
 state 14
 
@@ -293,15 +305,16 @@ state 14
     (11) terme -> . NOMBRE
     (12) terme -> . MOINS terme
     (13) terme -> . LPAREN expr RPAREN
-    (14) terme -> . ANS
+    (14) terme -> . ANS LCROCHET NOMBRE RCROCHET
+    (15) terme -> . ANS
 
     NOMBRE          shift and go to state 6
     MOINS           shift and go to state 5
     LPAREN          shift and go to state 7
     ANS             shift and go to state 8
 
-    expr3                          shift and go to state 22
-    terme                          shift and go to state 18
+    expr3                          shift and go to state 23
+    terme                          shift and go to state 19
 
 state 15
 
@@ -322,12 +335,19 @@ state 16
     (3) expr -> expr . PLUS expr2
     (4) expr -> expr . MOINS expr2
 
-    RPAREN          shift and go to state 23
+    RPAREN          shift and go to state 24
     PLUS            shift and go to state 10
     MOINS           shift and go to state 11
 
 
 state 17
+
+    (14) terme -> ANS LCROCHET . NOMBRE RCROCHET
+
+    NOMBRE          shift and go to state 25
+
+
+state 18
 
     (3) expr -> expr PLUS expr2 .
     (6) expr2 -> expr2 . FOIS expr3
@@ -341,7 +361,7 @@ state 17
     DIV             shift and go to state 14
 
 
-state 18
+state 19
 
     (9) expr3 -> terme . POW expr3
     (10) expr3 -> terme .
@@ -355,7 +375,7 @@ state 18
     RPAREN          reduce using rule 10 (expr3 -> terme .)
 
 
-state 19
+state 20
 
     (4) expr -> expr MOINS expr2 .
     (6) expr2 -> expr2 . FOIS expr3
@@ -369,7 +389,7 @@ state 19
     DIV             shift and go to state 14
 
 
-state 20
+state 21
 
     (9) expr3 -> terme POW expr3 .
 
@@ -381,7 +401,7 @@ state 20
     RPAREN          reduce using rule 9 (expr3 -> terme POW expr3 .)
 
 
-state 21
+state 22
 
     (6) expr2 -> expr2 FOIS expr3 .
 
@@ -393,7 +413,7 @@ state 21
     RPAREN          reduce using rule 6 (expr2 -> expr2 FOIS expr3 .)
 
 
-state 22
+state 23
 
     (7) expr2 -> expr2 DIV expr3 .
 
@@ -405,7 +425,7 @@ state 22
     RPAREN          reduce using rule 7 (expr2 -> expr2 DIV expr3 .)
 
 
-state 23
+state 24
 
     (13) terme -> LPAREN expr RPAREN .
 
@@ -416,6 +436,26 @@ state 23
     FOIS            reduce using rule 13 (terme -> LPAREN expr RPAREN .)
     DIV             reduce using rule 13 (terme -> LPAREN expr RPAREN .)
     RPAREN          reduce using rule 13 (terme -> LPAREN expr RPAREN .)
+
+
+state 25
+
+    (14) terme -> ANS LCROCHET NOMBRE . RCROCHET
+
+    RCROCHET        shift and go to state 26
+
+
+state 26
+
+    (14) terme -> ANS LCROCHET NOMBRE RCROCHET .
+
+    POW             reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
+    PLUS            reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
+    MOINS           reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
+    $end            reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
+    FOIS            reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
+    DIV             reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
+    RPAREN          reduce using rule 14 (terme -> ANS LCROCHET NOMBRE RCROCHET .)
 
 WARNING: 
 WARNING: Conflicts:

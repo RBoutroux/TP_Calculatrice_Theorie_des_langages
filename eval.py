@@ -2,7 +2,7 @@ import ply.lex as lex
 import ply.yacc as yacc
 
 # Liste des noms des tokens
-tokens = ('NOMBRE', 'PLUS', 'MOINS','FOIS', 'DIV', 'LPAREN', 'RPAREN', 'POW', 'ANS')
+tokens = ('NOMBRE', 'PLUS', 'MOINS','FOIS', 'DIV', 'LPAREN', 'RPAREN', 'POW', 'ANS', 'LCROCHET', 'RCROCHET')
 
 # Définition de l'expression rationnelle pour chaque token et de la valeur 
 # associée (pour NOMBRE)
@@ -14,9 +14,11 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_POW = r'\^'
 t_ANS = r'ans'
+t_LCROCHET = r'\['
+t_RCROCHET = r'\]'
 
 # Sauvegarde de ans
-ans = 0
+ans = [0]*100
 
 def t_NOMBRE(t):
     r'[0-9.0-9]+' # on peut aussi écrire r'\d+'
@@ -46,7 +48,9 @@ def p_expression(p):
     'expression : expr'
     # une expression à calculer 
     global ans
-    ans = p[1]
+    ans.append(p[1])
+    if ans.__len__() > 100:
+        ans.pop(0)
     print(p[1]) # on affiche la valeur de expr
 
 # une expr est composée (pour l'instant) d'une liste de valeurs
@@ -96,17 +100,24 @@ def p_terme(p):
     '''terme : NOMBRE
             | MOINS terme
             | LPAREN expr RPAREN
+            | ANS LCROCHET NOMBRE RCROCHET
             | ANS'''
     global ans
     # pour l'instant, un terme est forcément un nombre
-    if p[1] == 'ans':
-        p[0] = ans
+    if (p[1] == 'ans' and len(p) == 2):
+        p[0] = ans[99]
     elif len(p) == 2:
         p[0] = p[1]
     elif (p[1] == '(' and p[3] == ')'):
         p[0] = p[2]
     elif p[1] == '-':
         p[0] = -p[2]
+    elif len(p) == 5:
+        if p[3] > 100:
+            print("Erreur: ans[", p[3], "] n'existe pas")
+            print("Choisissez une valeur entre 0 et 99")
+        else:
+            p[0] = ans[99 - int(p[3])]
     
 
 # gestion minimaliste des erreurs de syntaxe
