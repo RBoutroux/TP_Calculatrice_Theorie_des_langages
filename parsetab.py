@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'DIV FOIS LPAREN MOINS NOMBRE PLUS POW RPARENexpression : exprexpr : termeexpr : expr PLUS  expr2\n            | expr MOINS expr2\n            | expr2expr2 : expr2 FOIS expr3\n            | expr2 DIV expr3\n            | expr3expr3 : terme POW expr3\n            | termeterme : NOMBRE\n            | LPAREN expr RPAREN'
+_lr_signature = 'DIV FOIS LPAREN MOINS NOMBRE PLUS POW RPARENexpression : exprexpr : termeexpr : expr PLUS  expr2\n            | expr MOINS expr2\n            | expr2expr2 : expr2 FOIS expr3\n            | expr2 DIV expr3\n            | expr3expr3 : terme POW expr3\n            | termeterme : NOMBRE\n            | MOINS terme\n            | LPAREN expr RPAREN'
     
-_lr_action_items = {'NOMBRE':([0,6,8,9,10,11,12,],[5,5,5,5,5,5,5,]),'LPAREN':([0,6,8,9,10,11,12,],[6,6,6,6,6,6,6,]),'$end':([1,2,3,4,5,7,14,15,16,17,18,19,20,],[0,-1,-2,-5,-11,-8,-3,-10,-4,-9,-6,-7,-12,]),'PLUS':([2,3,4,5,7,13,14,15,16,17,18,19,20,],[8,-2,-5,-11,-8,8,-3,-10,-4,-9,-6,-7,-12,]),'MOINS':([2,3,4,5,7,13,14,15,16,17,18,19,20,],[9,-2,-5,-11,-8,9,-3,-10,-4,-9,-6,-7,-12,]),'RPAREN':([3,4,5,7,13,14,15,16,17,18,19,20,],[-2,-5,-11,-8,20,-3,-10,-4,-9,-6,-7,-12,]),'POW':([3,5,15,20,],[10,-11,10,-12,]),'FOIS':([3,4,5,7,14,15,16,17,18,19,20,],[-10,11,-11,-8,11,-10,11,-9,-6,-7,-12,]),'DIV':([3,4,5,7,14,15,16,17,18,19,20,],[-10,12,-11,-8,12,-10,12,-9,-6,-7,-12,]),}
+_lr_action_items = {'NOMBRE':([0,5,7,9,10,11,12,13,],[6,6,6,6,6,6,6,6,]),'MOINS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,],[5,10,-2,-5,5,-11,5,-8,5,5,5,5,5,-12,10,-3,-10,-4,-9,-6,-7,-13,]),'LPAREN':([0,5,7,9,10,11,12,13,],[7,7,7,7,7,7,7,7,]),'$end':([1,2,3,4,6,8,14,16,17,18,19,20,21,22,],[0,-1,-2,-5,-11,-8,-12,-3,-10,-4,-9,-6,-7,-13,]),'PLUS':([2,3,4,6,8,14,15,16,17,18,19,20,21,22,],[9,-2,-5,-11,-8,-12,9,-3,-10,-4,-9,-6,-7,-13,]),'RPAREN':([3,4,6,8,14,15,16,17,18,19,20,21,22,],[-2,-5,-11,-8,-12,22,-3,-10,-4,-9,-6,-7,-13,]),'POW':([3,6,14,17,22,],[11,-11,-12,11,-13,]),'FOIS':([3,4,6,8,14,16,17,18,19,20,21,22,],[-10,12,-11,-8,-12,12,-10,12,-9,-6,-7,-13,]),'DIV':([3,4,6,8,14,16,17,18,19,20,21,22,],[-10,13,-11,-8,-12,13,-10,13,-9,-6,-7,-13,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,],[1,]),'expr':([0,6,],[2,13,]),'terme':([0,6,8,9,10,11,12,],[3,3,15,15,15,15,15,]),'expr2':([0,6,8,9,],[4,4,14,16,]),'expr3':([0,6,8,9,10,11,12,],[7,7,7,7,17,18,19,]),}
+_lr_goto_items = {'expression':([0,],[1,]),'expr':([0,7,],[2,15,]),'terme':([0,5,7,9,10,11,12,13,],[3,14,3,17,17,17,17,17,]),'expr2':([0,7,9,10,],[4,4,16,18,]),'expr3':([0,7,9,10,11,12,13,],[8,8,8,8,19,20,21,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -38,5 +38,6 @@ _lr_productions = [
   ('expr3 -> terme POW expr3','expr3',3,'p_expr3','eval.py',82),
   ('expr3 -> terme','expr3',1,'p_expr3','eval.py',83),
   ('terme -> NOMBRE','terme',1,'p_terme','eval.py',90),
-  ('terme -> LPAREN expr RPAREN','terme',3,'p_terme','eval.py',91),
+  ('terme -> MOINS terme','terme',2,'p_terme','eval.py',91),
+  ('terme -> LPAREN expr RPAREN','terme',3,'p_terme','eval.py',92),
 ]

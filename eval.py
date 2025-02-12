@@ -88,12 +88,15 @@ def p_expr3(p):
 
 def p_terme(p):
     '''terme : NOMBRE
+            | MOINS terme
             | LPAREN expr RPAREN'''
     # pour l'instant, un terme est forcément un nombre
     if len(p) == 2:
         p[0] = p[1]
     elif (p[1] == '(' and p[3] == ')'):
         p[0] = p[2]
+    elif p[1] == '-':
+        p[0] = -p[2]
 
 # gestion minimaliste des erreurs de syntaxe
 def p_error(p):
