@@ -1,0 +1,185 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> expr
+Rule 2     expr -> terme
+Rule 3     expr -> expr PLUS expr2
+Rule 4     expr -> expr MOINS expr2
+Rule 5     expr -> expr2
+Rule 6     expr2 -> expr2 FOIS terme
+Rule 7     expr2 -> terme
+Rule 8     terme -> NOMBRE
+
+Terminals, with rules where they appear
+
+FOIS                 : 6
+MOINS                : 4
+NOMBRE               : 8
+PLUS                 : 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+expr                 : 1 3 4
+expr2                : 3 4 5 6
+expression           : 0
+terme                : 2 6 7
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . expr
+    (2) expr -> . terme
+    (3) expr -> . expr PLUS expr2
+    (4) expr -> . expr MOINS expr2
+    (5) expr -> . expr2
+    (8) terme -> . NOMBRE
+    (6) expr2 -> . expr2 FOIS terme
+    (7) expr2 -> . terme
+
+    NOMBRE          shift and go to state 5
+
+    expression                     shift and go to state 1
+    expr                           shift and go to state 2
+    terme                          shift and go to state 3
+    expr2                          shift and go to state 4
+
+state 1
+
+    (0) S' -> expression .
+
+
+
+state 2
+
+    (1) expression -> expr .
+    (3) expr -> expr . PLUS expr2
+    (4) expr -> expr . MOINS expr2
+
+    $end            reduce using rule 1 (expression -> expr .)
+    PLUS            shift and go to state 6
+    MOINS           shift and go to state 7
+
+
+state 3
+
+    (2) expr -> terme .
+    (7) expr2 -> terme .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 2 (expr -> terme .)
+  ! reduce/reduce conflict for MOINS resolved using rule 2 (expr -> terme .)
+  ! reduce/reduce conflict for $end resolved using rule 2 (expr -> terme .)
+    PLUS            reduce using rule 2 (expr -> terme .)
+    MOINS           reduce using rule 2 (expr -> terme .)
+    $end            reduce using rule 2 (expr -> terme .)
+    FOIS            reduce using rule 7 (expr2 -> terme .)
+
+  ! PLUS            [ reduce using rule 7 (expr2 -> terme .) ]
+  ! MOINS           [ reduce using rule 7 (expr2 -> terme .) ]
+  ! $end            [ reduce using rule 7 (expr2 -> terme .) ]
+
+
+state 4
+
+    (5) expr -> expr2 .
+    (6) expr2 -> expr2 . FOIS terme
+
+    PLUS            reduce using rule 5 (expr -> expr2 .)
+    MOINS           reduce using rule 5 (expr -> expr2 .)
+    $end            reduce using rule 5 (expr -> expr2 .)
+    FOIS            shift and go to state 8
+
+
+state 5
+
+    (8) terme -> NOMBRE .
+
+    PLUS            reduce using rule 8 (terme -> NOMBRE .)
+    MOINS           reduce using rule 8 (terme -> NOMBRE .)
+    $end            reduce using rule 8 (terme -> NOMBRE .)
+    FOIS            reduce using rule 8 (terme -> NOMBRE .)
+
+
+state 6
+
+    (3) expr -> expr PLUS . expr2
+    (6) expr2 -> . expr2 FOIS terme
+    (7) expr2 -> . terme
+    (8) terme -> . NOMBRE
+
+    NOMBRE          shift and go to state 5
+
+    expr2                          shift and go to state 9
+    terme                          shift and go to state 10
+
+state 7
+
+    (4) expr -> expr MOINS . expr2
+    (6) expr2 -> . expr2 FOIS terme
+    (7) expr2 -> . terme
+    (8) terme -> . NOMBRE
+
+    NOMBRE          shift and go to state 5
+
+    expr2                          shift and go to state 11
+    terme                          shift and go to state 10
+
+state 8
+
+    (6) expr2 -> expr2 FOIS . terme
+    (8) terme -> . NOMBRE
+
+    NOMBRE          shift and go to state 5
+
+    terme                          shift and go to state 12
+
+state 9
+
+    (3) expr -> expr PLUS expr2 .
+    (6) expr2 -> expr2 . FOIS terme
+
+    PLUS            reduce using rule 3 (expr -> expr PLUS expr2 .)
+    MOINS           reduce using rule 3 (expr -> expr PLUS expr2 .)
+    $end            reduce using rule 3 (expr -> expr PLUS expr2 .)
+    FOIS            shift and go to state 8
+
+
+state 10
+
+    (7) expr2 -> terme .
+
+    FOIS            reduce using rule 7 (expr2 -> terme .)
+    PLUS            reduce using rule 7 (expr2 -> terme .)
+    MOINS           reduce using rule 7 (expr2 -> terme .)
+    $end            reduce using rule 7 (expr2 -> terme .)
+
+
+state 11
+
+    (4) expr -> expr MOINS expr2 .
+    (6) expr2 -> expr2 . FOIS terme
+
+    PLUS            reduce using rule 4 (expr -> expr MOINS expr2 .)
+    MOINS           reduce using rule 4 (expr -> expr MOINS expr2 .)
+    $end            reduce using rule 4 (expr -> expr MOINS expr2 .)
+    FOIS            shift and go to state 8
+
+
+state 12
+
+    (6) expr2 -> expr2 FOIS terme .
+
+    FOIS            reduce using rule 6 (expr2 -> expr2 FOIS terme .)
+    PLUS            reduce using rule 6 (expr2 -> expr2 FOIS terme .)
+    MOINS           reduce using rule 6 (expr2 -> expr2 FOIS terme .)
+    $end            reduce using rule 6 (expr2 -> expr2 FOIS terme .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: reduce/reduce conflict in state 3 resolved using rule (expr -> terme)
+WARNING: rejected rule (expr2 -> terme) in state 3
